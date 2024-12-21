@@ -1,0 +1,239 @@
+@startuml
+scale max 4000 width
+class Main {
++static void main(String[] args)
+}
+Main --down[#AAA]-o entities.humans.Wizard
+Main -down[#AAA]--o places.Corner
+Main -down[#AAA]-o entities.humans.Stupid
+Main -down[#AAA]--o entities.humans.Button
+Main -down[#AAA]-o entities.humans.Motley
+Main --down[#AAA]-o entities.They
+Main -down[#AAA]--o entities.humans.Small
+Main -down[#AAA]-o entities.humans.Small
+Main -down[#AAA]--o places.Pavement
+Main -down[#AAA]-o entities.They
+
+class places.Anywhere extends places.Place {
++Anywhere()
+}
+
+
+class places.Corner extends places.Place {
++Corner(String name, Relatives relative)
+}
+
+
+class places.Pavement extends places.Place {
++Pavement(String name, Relatives relative)
+}
+
+
+abstract class places.Place {
+-String name
+-Relatives relative
+
+#Place()
+#Place(String name)
+#Place(String name, Relatives relative)
+#void setName(String name)
++String getName()
+#void setRelative(Relatives relative)
++Relatives getRelative()
++String selfName()
++boolean equals(Object otherObject)
++int hashCode()
++String toString()
+}
+
+
+class exceptions.HumanCantStop extends Exception {
++HumanCantStop(String message)
++String getMessage()
+}
+
+
+enum enums.Areas {
+RIGHT_IN_FRONT_OF("прямо перед"),
+NOWHERE("посреди нигде"),
+NEAR("вокруг")
+-final String area
+Areas(String area)
++String getName()
+}
+
+
+struct record-Connections {
+-String and
+-String comma
+-String dot
+-String colon
+}
+
+
+enum enums.Modificators {
+SUDDENLY("неожиданно"),
+STRONGLY("крепко"),
+EACH_OTHER("друг на дружку"),
+STATIC_EYES("не спуская глаз"),
+NOTHING_AND_NOONE("ничего и никого"),
+QUIETLY("тихо")
+-final String modificator
+Modificators(String modificator)
++String getName()
+}
+
+
+enum enums.Moves {
+WALKING("идёт", "пошёл"),
+STAND("стоит", "остановился")
+-final String move
+-final String moveStart
+Moves(String move, String moveStart)
++String getName()
++String getNameSecond()
+}
+
+
+enum enums.Relatives {
+ON("на"),
+IN_THE_MIDDLE("посреди")
+-final String relative
+Relatives(String relative)
++String getName()
+}
+
+
+abstract class entities.Entity implements entities.interfaces.IHasArea, entities.interfaces.IHasLocation {
+-String name
+-Place location
+-Areas area
+
+#Entity(String name)
+#Entity(String name, Place location)
+#Entity(String name, Place location, Areas area)
++String getName()
+#void setName(String name)
++Place getLocation()
++void setLocation(Place location)
++Areas getArea()
++void setArea(Areas area)
++void selfArea()
++boolean equals(Object otherObject)
++int hashCode()
++String toString()
+}
+entities.Entity --down[#AAA]-o places.Anywhere
+
+class entities.They extends entities.Entity implements entities.interfaces.ICanHoldHands, entities.interfaces.ICanLookAt, entities.interfaces.ICantRecognize {
++They(String name)
++They(String name, Place location)
++They(String name, Place location, Areas area)
++void holdHands()
++void holdHands(Modificators mode)
++void lookAt()
++void lookAt(Modificators mode)
++void notRecognizing()
++void notRecognizing(Modificators mode)
+}
+
+
+interface entities.interfaces.ICanHoldHands {
+void holdHands()
+void holdHands(Modificators mode)
+}
+
+
+interface entities.interfaces.ICanLookAt {
+void lookAt()
+void lookAt(Modificators mode)
+}
+
+
+interface entities.interfaces.ICanSay {
+void say()
+void say(Modificators mode)
+}
+
+
+interface entities.interfaces.ICantRecognize {
+void notRecognizing()
+void notRecognizing(Modificators mode)
+}
+
+
+interface entities.interfaces.IHasArea {
+void setArea(Areas area)
+void selfArea()
+Areas getArea()
+}
+
+
+interface entities.interfaces.IHasLocation {
+void setLocation(Place location)
+Place getLocation()
+}
+
+
+interface entities.interfaces.IHasMobility {
+void stop() throws HumanCantStop
+void stop(Modificators mode) throws HumanCantStop
+void move()
+}
+
+
+class entities.humans.Button extends entities.humans.Human {
++Button(String name, Moves state)
++Button(String name, Moves state, Place location)
++Button(String name, Moves state, Place location, Areas area)
+}
+
+
+abstract class entities.humans.Human extends entities.Entity implements entities.interfaces.IHasMobility {
+-Moves state
++Human(String name, Moves state)
++Human(String name, Moves state, Place location)
++Human(String name, Moves state, Place location, Areas area)
++Moves getState()
+#void setState(Moves state)
++void stop() throws HumanCantStop
++void stop(Modificators mode) throws HumanCantStop
++void move()
+}
+entities.humans.Human -down[#AAA]--o exceptions.HumanCantStop
+entities.humans.Human -down[#AAA]-o places.Anywhere
+entities.humans.Human -down[#AAA]--o exceptions.HumanCantStop
+entities.humans.Human -down[#AAA]-o places.Anywhere
+entities.humans.Human --down[#AAA]-o places.Anywhere
+
+class entities.humans.Motley extends entities.humans.Human {
++Motley(String name, Moves state)
++Motley(String name, Moves state, Place location)
++Motley(String name, Moves state, Place location, Areas area)
+}
+
+
+class entities.humans.Small extends entities.humans.Human {
++Small(String name, Moves state)
++Small(String name, Moves state, Place location)
++Small(String name, Moves state, Place location, Areas area)
+}
+
+
+class entities.humans.Stupid extends entities.humans.Human {
++Stupid(String name, Moves state)
++Stupid(String name, Moves state, Place location)
++Stupid(String name, Moves state, Place location, Areas area)
+}
+
+
+class entities.humans.Wizard extends entities.humans.Human implements entities.interfaces.ICanSay {
++Wizard(String name, Moves state)
++Wizard(String name, Moves state, Place location)
++Wizard(String name, Moves state, Place location, Areas area)
++void say()
++void say(Modificators mode)
+}
+
+
+@enduml
